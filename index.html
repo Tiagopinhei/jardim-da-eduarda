@@ -6,19 +6,14 @@
     <title>nossa história | 28</title>
 
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;1,400&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
-    
     <script src="https://cdn.tailwindcss.com"></script>
-    
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
 
     <script>
         tailwind.config = {
             theme: {
                 extend: {
-                    fontFamily: {
-                        serif: ['Playfair Display', 'serif'],
-                        sans: ['Inter', 'sans-serif'],
-                    },
+                    fontFamily: { serif: ['Playfair Display', 'serif'], sans: ['Inter', 'sans-serif'] },
                     colors: { paper: '#fdfaf7', ink: '#2c2c2c', gold: '#d4af37' }
                 }
             }
@@ -33,24 +28,25 @@
             position: absolute; 
             transform-origin: bottom center; 
             will-change: transform; 
-            filter: drop-shadow(0 10px 15px rgba(0,0,0,0.15));
+            filter: drop-shadow(0 10px 15px rgba(212, 175, 55, 0.2));
+            opacity: 0;
         }
         ::-webkit-scrollbar { width: 0px; background: transparent; }
     </style>
 </head>
 <body class="text-ink antialiased flex flex-col items-center">
 
+    <div id="audio-container" style="position: absolute; left: -9999px; top: -9999px;"></div>
+
     <button id="music-btn" class="fixed bottom-6 right-6 bg-white/90 backdrop-blur-sm border border-gray-200 text-ink px-6 py-3 rounded-full shadow-lg text-sm font-medium z-50 hover:text-gold transition-colors flex items-center gap-2">
         <span class="text-lg">🎶</span> nossa trilha
     </button>
-    <iframe id="song" class="hidden" src="https://www.youtube.com/embed/pAnvIuI8Wxs?enablejsapi=1" frameborder="0"></iframe>
 
     <header class="relative w-full h-screen flex flex-col items-center justify-center overflow-hidden">
         <div class="z-10 text-center mt-[-10vh]" id="hero-text">
             <h1 class="bruno text-5xl md:text-6xl text-ink tracking-tight mb-4 opacity-0">o tempo que a gente inventou.</h1>
             <p class="text-gray-500 text-sm tracking-widest uppercase opacity-0" id="hero-sub">Para Eduarda, meu girassol</p>
         </div>
-        
         <div id="garden-container" class="absolute bottom-0 w-full h-[50vh] flex justify-center items-end pointer-events-none"></div>
     </header>
 
@@ -80,7 +76,6 @@
     </footer>
 
     <script>
-        // Datas
         const dateMeet = new Date(2025, 0, 31, 0, 0, 0); 
         const dateLove = new Date(2025, 7, 28, 0, 0, 0);
 
@@ -100,11 +95,10 @@
         setInterval(updateTimers, 1000);
         updateTimers();
 
-        // Animações Iniciais (Aqui faz o texto aparecer)
         gsap.fromTo("#hero-text h1", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 1.5, ease: "power3.out", delay: 0.5 });
         gsap.fromTo("#hero-sub", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 1.5, ease: "power3.out", delay: 1 });
 
-        // Scroll Reveal
+        const observerOptions = { threshold: 0.3 };
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if(entry.isIntersecting) {
@@ -112,20 +106,37 @@
                     observer.unobserve(entry.target);
                 }
             });
-        }, { threshold: 0.3 });
+        }, observerOptions);
 
         document.querySelectorAll('.date-card, #final-poem').forEach(el => observer.observe(el));
 
-        // Jardim 3D
         const garden = document.getElementById('garden-container');
         const flowers = [];
         const isMobile = window.innerWidth < 768;
         const numFlowers = isMobile ? 12 : 25; 
-        const hqSunflower = 'https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Animals%20and%20Nature/Sunflower.png';
+
+        const hqSunflower = 'https://img.icons8.com/parakeet/96/sunflower.png';
 
         for(let i = 0; i < numFlowers; i++) {
             const f = document.createElement('img');
             f.src = hqSunflower;
+            f.onload = () => {
+                gsap.fromTo(f, 
+                    { opacity: 0, y: 150, scale: 0 }, 
+                    { opacity: 1, y: 0, scale: f.dataset.scale, duration: 1.5, ease: "back.out(1.5)", delay: 1 + Math.random() * 2 }
+                );
+            };
+            f.onerror = () => {
+                f.style.display = 'none';
+                const emoji = document.createElement('div');
+                emoji.className = 'flower text-6xl';
+                emoji.innerText = '🌻';
+                emoji.dataset.scale = 1;
+                flowers.push({ el: emoji }); 
+                garden.appendChild(emoji);
+                gsap.fromTo(emoji, { opacity: 0, y: 150 }, { opacity: 1, y: 0, duration: 1.5, delay: 1 });
+            }
+
             f.className = 'flower w-16 md:w-28';
             
             const left = Math.random() * 90; 
@@ -135,22 +146,20 @@
             f.style.left = `${left}%`;
             f.style.bottom = `${bottom}px`;
             f.style.zIndex = Math.floor(100 - bottom);
-            
-            garden.appendChild(f);
-            flowers.push({ el: f, baseScale: scale });
+            f.dataset.scale = scale; 
 
-            gsap.fromTo(f, 
-                { opacity: 0, y: 150, scale: 0 }, 
-                { opacity: 1, y: 0, scale: scale, duration: 1.5, ease: "back.out(1.5)", delay: 1.5 + Math.random() * 1.5 }
-            );
+            garden.appendChild(f);
+            flowers.push({ el: f });
         }
 
-        // Heliotropismo
         function rotateFlowers(clientX, clientY) {
             flowers.forEach(f => {
+                if(f.el.tagName === 'DIV') return; 
+
                 const rect = f.el.getBoundingClientRect();
                 const centerX = rect.left + rect.width / 2;
-                const centerY = rect.top + rect.height;
+                const centerY = rect.top + rect.height; 
+
                 const angleRad = Math.atan2(clientY - centerY, clientX - centerX);
                 let angleDeg = angleRad * (180 / Math.PI) + 90;
 
@@ -164,14 +173,16 @@
         document.addEventListener('mousemove', (e) => rotateFlowers(e.clientX, e.clientY));
         document.addEventListener('touchmove', (e) => rotateFlowers(e.touches[0].clientX, e.touches[0].clientY));
 
-        // Música
+        // --- O TRUQUE DO PLAYER DE MÚSICA ---
         const musicBtn = document.getElementById('music-btn');
-        const song = document.getElementById('song');
         let isPlaying = false;
         
         musicBtn.addEventListener('click', () => {
             if(!isPlaying) {
-                song.src += "&autoplay=1";
+                // Injeta o player com permissão de autoplay e tamanho 10x10 (escondido pelo CSS do container)
+                document.getElementById('audio-container').innerHTML = 
+                    `<iframe width="10" height="10" src="https://www.youtube.com/embed/pAnvIuI8Wxs?autoplay=1" allow="autoplay" frameborder="0"></iframe>`;
+                
                 musicBtn.innerHTML = '<span class="text-lg">💛</span> ouvindo nosso romance';
                 musicBtn.classList.add('text-gold', 'border-gold');
                 gsap.to(musicBtn, { scale: 1.05, duration: 0.3, yoyo: true, repeat: 1 });
