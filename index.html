@@ -3,213 +3,220 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>nosso tempo | 🌻</title>
+    <title>nosso jardim | eduarda + tiago</title>
+
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;1,400&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --paper: #fdfaf7; /* Fundo creme papel antigo */
-            --ink: #2c2c2c;
-            --gold: #d4af37; /* Dourado poético */
-            --accent: #e0ac00;
-        }
-
-        body, html { margin: 0; padding: 0; background: var(--paper); color: var(--ink); font-family: 'Inter', sans-serif; overflow-x: hidden; text-align: center; scroll-behavior: smooth; }
-        .bruno { font-family: 'Playfair Display', serif; font-style: italic; text-transform: lowercase; letter-spacing: -0.5px; }
-
-        /* O CONTAINER DO CORAÇÃO MÁGICO */
-        header {
-            height: 90vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            position: relative;
-            padding: 20px;
-        }
-
-        h1 { font-size: 2.5rem; margin: 0; font-weight: 400; animation: fadeIn 2s ease-out; }
-        .subtitle { color: #888; font-size: 1rem; opacity: 0; animation: fadeIn 2s 1s forwards; }
-
-        /* O CONTAINER ONDE AS MEMÓRIAS NASCERÃO */
-        #memory-heart {
-            position: relative;
-            width: 300px; /* Tamanho do coração */
-            height: 300px;
-            margin: 50px auto;
-            perspective: 1000px; /* Profundidade 3D */
-            pointer-events: auto; /* Garante que é clicável */
-        }
-
-        /* UMA FOTO INDIVIDUAL NO MOSAICO */
-        .photo-card {
-            position: absolute;
-            width: 60px; /* Tamanho de cada foto/flor */
-            height: 60px;
-            border-radius: 50%; /* Faz a foto ser redonda */
-            background-size: cover;
-            background-position: center;
-            border: 2px solid #fff;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-            cursor: pointer;
-            transition: transform 0.3s ease-out, box-shadow 0.3s ease-out, opacity 0.3s ease-out;
-            opacity: 0;
-            transform-origin: center center;
-            will-change: transform;
-        }
-
-        /* Efeito de Bloom (Interatividade) */
-        .photo-card:hover {
-            transform: scale(1.3) rotate(-5deg) !important;
-            box-shadow: 0 8px 25px rgba(212, 175, 55, 0.4);
-            z-index: 100 !important;
-        }
-
-        /* TEXTO E CONTADOR MÍNIMO (ESTILO BRUNO FONTES) */
-        .section {
-            padding: 100px 20px;
-            max-width: 800px;
-            margin: 0 auto;
-            text-align: center;
-        }
-
-        .poem-line {
-            font-size: 1.4rem;
-            font-style: italic;
-            margin-bottom: 40px;
-            color: #bbb;
-        }
-
-        .highlight {
-            color: var(--accent);
-            font-weight: 600;
-        }
-
-        .timer-box {
-            border: 1px solid var(--accent);
-            padding: 40px;
-            border-radius: 15px;
-            margin: 50px auto;
-            max-width: 500px;
-            background: rgba(212, 175, 55, 0.03);
-            font-variant-numeric: tabular-nums; /* Mantém os números fixos */
-        }
-
-        #timer { font-size: 1.1rem; letter-spacing: 1.5px; font-weight: bold; color: var(--gold); }
-
-        /* RODAPÉ MÍNIMO */
-        footer { padding: 80px; text-align: center; font-size: 0.8rem; opacity: 0.4; }
-
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-    </style>
-</head>
-<body>
-
-    <header>
-        <div data-aos="fade-up">
-            <h1 class="bruno">o sol que a gente divide.</h1>
-            <p class="subtitle">para eduarda, com todo o meu girassol.</p>
-        </div>
-        
-        <div id="memory-heart"></div>
-    </header>
-
-    <div class="section">
-      <div class="poem-line bruno" style="margin-top: 0;">
-            de todos os janeiros que eu já vivi,<br>
-            não foi sorte.<br>
-            agosto me provou que a gente era destino.
-        </div>
-    </div>
-
-    <div class="section">
-        <div class="timer-box" style="margin-top: 0;">
-            <p style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 2px; color: #888;">Nós dois</p>
-            <div id="timer">Calculando nossa história...</div>
-            <p class="bruno" style="color: var(--accent); margin-top: 10px;">dias e noites virando pro sol.</p>
-        </div>
-    </div>
-
-    <footer class="bruno">tiago & eduarda — 2026</footer>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
 
     <script>
-        // --- 1. CONFIGURAÇÃO DE DATAS ---
-        const start = new Date(2025, 7, 28); // 28 de Agosto (mês 7)
-
-        // --- 2. GERAÇÃO DO CORAÇÃO MÁGICO ---
-        function createHeart() {
-            const container = document.getElementById('memory-heart');
-            
-            // --- INSIRA OS LINKS DAS SUAS 10 FOTOS AQUI ---
-            const photos = [
-                'foto1.jpg',
-                'foto2.jpg',
-                'foto3.jpg',
-                'foto4.jpg',
-                'foto5.jpg',
-                'foto6.jpg',
-                'foto7.jpg',
-                'foto8.jpg',
-                'foto9.jpg',
-                'foto10.jpg'
-            ];
-
-            const totalPhotos = photos.length;
-
-            for (let i = 0; i < totalPhotos; i++) {
-                const card = document.createElement('div');
-                card.className = 'photo-card';
-                card.style.backgroundImage = `url('${photos[i]}')`;
-
-                // --- MATEMÁTICA DO CORAÇÃO (FÓRMULA PROCEDURAL) ---
-                // Isso espalha as fotos em um formato de coração orgânico
-                const t = Math.random() * 2 * Math.PI;
-                const x = 16 * Math.pow(Math.sin(t), 3);
-                const y = -(13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t));
-                
-                // Posicionamento no container
-                // 150 é o centro, x * 6 é o raio
-                const left = (150 + x * 6) + 'px';
-                const top = (130 + y * 6) + 'px';
-
-                // Aplica posição e delay aleatório para o bloom
-                card.style.left = left;
-                card.style.top = top;
-                card.style.zIndex = Math.floor(y + 100); // Fotos de baixo ficam na frente
-                card.style.animation = `bloom 1s ease-out ${Math.random() * 1.5}s forwards`;
-                
-                // Rotaciona a foto aleatoriamente para parecer "espalhada"
-                const rotation = -15 + Math.random() * 30;
-                card.style.transform = `rotate(${rotation}deg) scale(0)`;
-
-                container.appendChild(card);
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        serif: ['Playfair Display', 'serif'],
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: { paper: '#fdfaf7', ink: '#2c2c2c', gold: '#d4af37', accent: '#e0ac00' }
+                }
             }
         }
+    </script>
 
-        // Animação de aparecimento das fotos
-        const bloomAnimation = document.createElement('style');
-        bloomAnimation.innerHTML = `
-            @keyframes bloom {
-                0% { opacity: 0; transform: scale(0) rotate(0deg); }
-                100% { opacity: 1; transform: scale(1) rotate(0deg); }
-            }
-        `;
-        document.head.appendChild(bloomAnimation);
+    <style>
+        /* Estilos Base e Correções Visuais */
+        body { background-color: #fdfaf7; overflow-x: hidden; scroll-behavior: smooth; }
+        
+        /* Classe Bruno Fontes: Itálico, minúsculo, espaçado */
+        .bruno { font-family: 'Playfair Display', serif; font-style: italic; text-transform: lowercase; letter-spacing: -0.5px; }
+        
+        /* Configuração do contêiner do jardim para perspectiva 3D */
+        #garden-container { perspective: 1000px; }
+        
+        /* A flor-foto: Circular, com sombra suave, começa invisível para o GSAP animar */
+        .flower { 
+            position: absolute; 
+            transform-origin: bottom center; 
+            will-change: transform; 
+            aspect-ratio: 1/1; /* Garante que é um quadrado perfeito */
+            border-radius: 50%; /* Faz ser um círculo perfeito */
+            object-fit: cover; /* Garante que a foto preenche o círculo sem distorcer */
+            border: 3px solid #fff; /* Borda branca elegante */
+            filter: drop-shadow(0 10px 15px rgba(0,0,0,0.15));
+            opacity: 0;
+            cursor: pointer;
+            transition: transform 0.3s ease-out; /* Para o hover */
+        }
 
-        // --- 3. CONTADOR ---
-        function update() {
+        /* Efeito de Bloom no Hover */
+        .flower:hover { transform: scale(1.1) rotate(-3deg) !important; z-index: 100; }
+
+        /* Esconder barra de rolagem mas permitir rolar */
+        ::-webkit-scrollbar { width: 0px; background: transparent; }
+    </style>
+</head>
+<body class="text-ink antialiased flex flex-col items-center">
+
+    <div id="audio-container" style="position: absolute; left: -9999px; top: -9999px;"></div>
+
+    <button id="music-btn" class="fixed bottom-6 right-6 bg-white/90 backdrop-blur-sm border border-gray-200 text-ink px-6 py-3 rounded-full shadow-lg text-sm font-medium z-50 hover:text-gold transition-colors flex items-center gap-2">
+        <span class="text-lg">🎶</span> nossa trilha
+    </button>
+
+    <header class="relative w-full h-screen flex flex-col items-center justify-center overflow-hidden">
+        <div class="z-10 text-center mt-[-10vh]" id="hero-text">
+            <h1 class="bruno text-5xl md:text-6xl text-ink tracking-tight mb-4 opacity-0">o tempo que a gente inventou.</h1>
+            <p class="text-gray-500 text-sm tracking-widest uppercase opacity-0" id="hero-sub">para eduarda, minha luz.</p>
+        </div>
+        
+        <div id="garden-container" class="absolute bottom-0 w-full h-[55vh] flex justify-center items-end pointer-events-none"></div>
+    </header>
+
+    <section class="w-full max-w-2xl px-6 py-20 flex flex-col gap-24 z-10 mt-10">
+        
+        <div class="date-card opacity-0 translate-y-10 bg-white p-10 rounded-3xl shadow-xl shadow-gold/5 border border-gold/10 relative">
+            <div class="absolute -top-4 left-10 bg-paper px-4 text-xs font-bold tracking-widest text-gray-400 uppercase">31 de janeiro de 2025</div>
+            <h2 class="bruno text-3xl mb-2 text-gold">o primeiro olhar.</h2>
+            <p class="text-gray-600 mb-6">quando o mundo fez sentido pela primeira vez.</p>
+            <div id="timer-meet" class="text-2xl font-semibold tabular-nums text-ink">Calculando...</div>
+        </div>
+
+        <div class="date-card opacity-0 translate-y-10 bg-white p-10 rounded-3xl shadow-xl shadow-gold/5 border border-gold/10 relative">
+            <div class="absolute -top-4 left-10 bg-paper px-4 text-xs font-bold tracking-widest text-gray-400 uppercase">28 de agosto de 2025</div>
+            <h2 class="bruno text-3xl mb-2 text-gold">o nosso nó.</h2>
+            <p class="text-gray-600 mb-6">quando a gente decidiu ser par.</p>
+            <div id="timer-love" class="text-2xl font-semibold tabular-nums text-ink">Calculando...</div>
+        </div>
+
+    </section>
+
+    <footer class="w-full text-center py-32 flex flex-col items-center">
+        <p class="bruno text-3xl md:text-4xl leading-relaxed max-w-lg text-ink/90 opacity-0" id="final-poem">
+            que a gente continue assim:<br>
+            virando pro sol,<br>
+            virando um pro outro.
+        </p>
+        <p class="mt-20 text-xs text-gray-400 tracking-widest uppercase">tiago & eduarda — 2026</p>
+    </footer>
+    <script>
+        // --- 1. AS DUAS DATAS EXATAS ---
+        const dateMeet = new Date(2025, 0, 31, 0, 0, 0); // 31 de Janeiro (Mês 0)
+        const dateLove = new Date(2025, 7, 28, 0, 0, 0); // 28 de Agosto (Mês 7)
+
+        function updateTimers() {
             const now = new Date();
-            const diff = now - start;
-            const d = Math.floor(diff / 86400000);
-            const h = Math.floor((diff / 3600000) % 24);
-            const m = Math.floor((diff / 60000) % 60);
-            const s = Math.floor((diff / 1000) % 60);
-            document.getElementById('timer').innerText = `${d} dias • ${h}H • ${m}M • ${s}S`;
+            const calc = (date, id) => {
+                const diff = now - date;
+                const d = Math.floor(diff / 86400000);
+                const h = Math.floor((diff / 3600000) % 24);
+                const m = Math.floor((diff / 60000) % 60);
+                const s = Math.floor((diff / 1000) % 60);
+                document.getElementById(id).innerText = `${d}d ${h}h ${m}m ${s}s`;
+            };
+            calc(dateMeet, 'timer-meet');
+            calc(dateLove, 'timer-love');
         }
-        setInterval(update, 1000);
-        update();
+        setInterval(updateTimers, 1000);
+        updateTimers();
 
-        // Inicializa o Coração
-        createHeart();
+        // --- 2. ANIMAÇÕES DE CINEMA (GSAP) ---
+        gsap.fromTo("#hero-text h1", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 1.5, ease: "power3.out", delay: 0.5 });
+        gsap.fromTo("#hero-sub", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 1.5, ease: "power3.out", delay: 1 });
+
+        // Revela as datas quando a pessoa rolar a página para baixo
+        const observerOptions = { threshold: 0.3 };
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if(entry.isIntersecting) {
+                    gsap.fromTo(entry.target, { opacity: 0, y: 50 }, { opacity: 1, y: 0, duration: 1.2, ease: "power2.out" });
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.date-card, #final-poem').forEach(el => observer.observe(el));
+
+        // --- 3. JARDIM DE MEMÓRIAS (SUAS FOTOS) ---
+        const garden = document.getElementById('garden-container');
+        const flowers = [];
+        const isMobile = window.innerWidth < 768;
+        const numFlowers = isMobile ? 12 : 24; 
+
+        // LISTA DAS SUAS FOTOS (Upe fotos no GitHub com esses nomes)
+        const photoList = [
+            'foto1.jpg', 'foto2.jpg', 'foto3.jpg', 'foto4.jpg', 'foto5.jpg',
+            'foto6.jpg', 'foto7.jpg', 'foto8.jpg', 'foto9.jpg', 'foto10.jpg'
+        ];
+
+        for(let i = 0; i < numFlowers; i++) {
+            const f = document.createElement('img');
+            
+            // Pega as fotos em looping
+            f.src = photoList[i % photoList.length];
+            
+            // Blindagem: Se você não upou a foto, ele bota um girassol no lugar
+            f.onerror = () => { f.src = 'https://img.icons8.com/parakeet/96/sunflower.png'; };
+
+            f.className = 'flower w-16 h-16 md:w-24 md:h-24 pointer-events-auto';
+            
+            const left = Math.random() * 90; 
+            const bottom = -10 + Math.random() * 40; 
+            const scale = 0.7 + Math.random() * 0.4; 
+            
+            f.style.left = `${left}%`;
+            f.style.bottom = `${bottom}px`;
+            f.style.zIndex = Math.floor(100 - bottom); 
+            f.dataset.scale = scale; 
+
+            garden.appendChild(f);
+            flowers.push({ el: f });
+
+            // Animação de brotar elástica
+            gsap.fromTo(f, 
+                { opacity: 0, y: 150, scale: 0 }, 
+                { opacity: 1, y: 0, scale: scale, duration: 1.5, ease: "back.out(1.5)", delay: 1 + Math.random() * 2 }
+            );
+        }
+
+        // --- 4. HELIOTROPISMO (FOTOS OLHANDO PARA O DEDO/MOUSE) ---
+        function rotateFlowers(clientX, clientY) {
+            flowers.forEach(f => {
+                const rect = f.el.getBoundingClientRect();
+                const centerX = rect.left + rect.width / 2;
+                const centerY = rect.top + rect.height / 2;
+
+                const angleRad = Math.atan2(clientY - centerY, clientX - centerX);
+                let angleDeg = angleRad * (180 / Math.PI) + 90;
+
+                // Limite para a foto não virar de cabeça para baixo
+                if(angleDeg > 45) angleDeg = 45;
+                if(angleDeg < -45) angleDeg = -45;
+
+                gsap.to(f.el, { rotation: angleDeg, duration: 0.8, ease: "power2.out" });
+            });
+        }
+
+        document.addEventListener('mousemove', (e) => rotateFlowers(e.clientX, e.clientY));
+        document.addEventListener('touchmove', (e) => rotateFlowers(e.touches[0].clientX, e.touches[0].clientY));
+
+        // --- 5. O TRUQUE DO PLAYER DE MÚSICA INVISÍVEL ---
+        const musicBtn = document.getElementById('music-btn');
+        let isPlaying = false;
+        
+        musicBtn.addEventListener('click', () => {
+            if(!isPlaying) {
+                // Injeta o player com permissão total só no momento do clique
+                document.getElementById('audio-container').innerHTML = 
+                    `<iframe width="10" height="10" src="https://www.youtube.com/embed/pAnvIuI8Wxs?autoplay=1" allow="autoplay" frameborder="0"></iframe>`;
+                
+                musicBtn.innerHTML = '<span class="text-lg">💛</span> ouvindo nosso romance';
+                musicBtn.classList.add('text-gold', 'border-gold');
+                gsap.to(musicBtn, { scale: 1.05, duration: 0.3, yoyo: true, repeat: 1 });
+                isPlaying = true;
+            }
+        });
     </script>
 </body>
 </html>
