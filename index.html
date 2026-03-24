@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>nossa história | 28</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;1,400&family=Inter:wght@300;400&display=swap" rel="stylesheet">
+    <style>
+        :root { --bg: #fdfaf7; --text: #2c2c2c; --accent: #d4af37; }
+        body { background: var(--bg); color: var(--text); margin: 0; font-family: 'Inter', sans-serif; display: flex; flex-direction: column; align-items: center; overflow-x: hidden; text-align: center; }
+        .bruno { font-family: 'Playfair Display', serif; font-style: italic; text-transform: lowercase; }
+        header { height: 80vh; display: flex; flex-direction: column; justify-content: center; padding: 20px; }
+        h1 { font-size: 2.2rem; margin-bottom: 10px; font-weight: 400; }
+        .date-box { margin: 60px 20px; padding: 20px; border-top: 1px solid #eee; width: 80%; max-width: 500px; }
+        .counter { font-size: 1.1rem; margin-top: 10px; color: var(--accent); font-weight: 600; letter-spacing: 1px; }
+        #garden { height: 200px; width: 100%; position: relative; display: flex; justify-content: center; align-items: flex-end; margin: 40px 0; }
+        .sunflower { position: absolute; transition: transform 0.2s; cursor: pointer; font-size: 30px; }
+        footer { padding: 60px 20px; font-size: 0.8rem; color: #999; }
+        #music-btn { position: fixed; bottom: 20px; background: white; border: 1px solid #ddd; padding: 10px 20px; border-radius: 30px; cursor: pointer; z-index: 100; font-size: 0.8rem; }
+    </style>
+</head>
+<body>
+
+    <button id="music-btn" onclick="playMusic()">tocar nossa trilha 🎶</button>
+    <iframe id="song" width="0" height="0" src="https://www.youtube.com/embed/pAnvIuI8Wxs?enablejsapi=1" frameborder="0"></iframe>
+
+    <header>
+        <h1 class="bruno">o tempo que a gente inventou.</h1>
+        <p style="color: #888; font-size: 0.9rem;">para eduarda, com todo o meu girassol.</p>
+        <div id="garden"></div>
+    </header>
+
+    <div class="date-box">
+        <p class="bruno" style="font-size: 1.3rem;">31 de janeiro de 2025</p>
+        <p>quando meus olhos te viram pela primeira vez.</p>
+        <div id="meet-timer" class="counter"></div>
+    </div>
+
+    <div class="date-box">
+        <p class="bruno" style="font-size: 1.3rem;">28 de agosto de 2025</p>
+        <p>quando a gente decidiu ser nó.</p>
+        <div id="love-timer" class="counter"></div>
+    </div>
+
+    <div style="max-width: 400px; padding: 40px 20px;" class="bruno">
+        que a gente continue assim:<br>
+        virando pro sol,<br>
+        virando um pro outro.
+    </div>
+
+    <footer>tiago & eduarda — 2026</footer>
+
+    <script>
+        const meet = new Date(2025, 0, 31); // Jan
+        const love = new Date(2025, 7, 28); // Ago
+
+        function timer() {
+            const now = new Date();
+            const calc = (date, id) => {
+                const diff = now - date;
+                const d = Math.floor(diff / 86400000);
+                const h = Math.floor((diff / 3600000) % 24);
+                const m = Math.floor((diff / 60000) % 60);
+                const s = Math.floor((diff / 1000) % 60);
+                document.getElementById(id).innerText = `${d}d ${h}h ${m}m ${s}s`;
+            }
+            calc(meet, 'meet-timer');
+            calc(love, 'love-timer');
+        }
+
+        const garden = document.getElementById('garden');
+        for(let i=0; i<10; i++) {
+            const f = document.createElement('div');
+            f.className = 'sunflower'; f.innerText = '🌻';
+            f.style.left = (10 + i*8) + '%';
+            garden.appendChild(f);
+        }
+
+        document.addEventListener('mousemove', (e) => {
+            document.querySelectorAll('.sunflower').forEach(f => {
+                const rect = f.getBoundingClientRect();
+                const angle = Math.atan2(e.clientY - rect.top, e.clientX - (rect.left + 15)) * 180 / Math.PI;
+                f.style.transform = `rotate(${angle + 90}deg)`;
+            });
+        });
+
+        function playMusic() {
+            const s = document.getElementById('song');
+            s.src += "&autoplay=1";
+            document.getElementById('music-btn').style.display = 'none';
+        }
+
+        setInterval(timer, 1000); timer();
+    </script>
+</body>
+</html>
