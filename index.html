@@ -4,235 +4,90 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>nossa história | 28</title>
+
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;1,400&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --bg: #fdfaf7; /* Creme papel antigo */
-            --text: #333;
-            --accent: #d4af37; /* Ouro Bruno Fontes */
-            --flower-img: url('https://img.icons8.com/emoji/96/sunflower-emoji.png'); /* Usando uma imagem mais bonitinha que o emoji padrão, mas o ideal seria uma foto real */
-        }
-
-        /* RESET BÁSICO */
-        body, html { margin: 0; padding: 0; background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; overflow-x: hidden; text-align: center; scroll-behavior: smooth; }
-        .bruno { font-family: 'Playfair Display', serif; font-style: italic; text-transform: lowercase; letter-spacing: -0.5px; }
-
-        /* CABEÇALHO E JARDIM MÁGICO */
-        header {
-            height: 90vh; /* Quase a tela cheia */
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            position: relative;
-            padding: 20px;
-        }
-
-        h1 { font-size: 2.8rem; margin: 0 0 10px 0; font-weight: 400; animation: fadeIn 2s ease-out; }
-        .subtitle { color: #888; font-size: 1rem; opacity: 0; animation: fadeIn 2s 1s forwards; }
-
-        /* CONTAINER DO JARDIM (Aqui está o segredo) */
-        #garden {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 50vh; /* Ocupa metade de baixo da seção */
-            z-index: 1;
-            display: flex;
-            justify-content: center;
-            align-items: flex-end;
-            perspective: 1000px; /* Cria profundidade 3D */
-        }
-
-        /* O GIRASSOL REALISTICO */
-        .sunflower {
-            position: absolute;
-            width: 80px; /* Tamanho da flor */
-            height: 80px;
-            background-image: var(--flower-img);
-            background-size: contain;
-            background-repeat: no-repeat;
-            background-position: center;
-            transform-origin: bottom center; /* Gira a partir da base */
-            transition: transform 0.2s ease-out; /* Movimento suave */
-            opacity: 0;
-            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.1)); /* Sombra suave */
-        }
-
-        /* ANIMAÇÃO DE APARECIMENTO DAS FLORES */
-        @keyframes bloom {
-            from { opacity: 0; transform: translateY(20px) scale(0.5); }
-            to { opacity: 1; transform: translateY(0) scale(1); }
-        }
-
-        /* CAIXAS DE DATA (Mais limpas e elegantes) */
-        .date-box {
-            margin: 100px 20px;
-            padding: 40px 20px;
-            border-top: 1px solid #eee;
-            border-bottom: 1px solid #eee;
-            width: 85%;
-            max-width: 550px;
-            background: #fff;
-            border-radius: 15px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.03);
-            position: relative;
-            z-index: 10;
-        }
-
-        .counter {
-            font-size: 1.3rem;
-            margin-top: 15px;
-            color: var(--accent);
-            font-weight: 600;
-            letter-spacing: 1.5px;
-            font-variant-numeric: tabular-nums; /* Números alinhados */
-        }
-
-        /* POESIA FINAL */
-        .poem-end { max-width: 450px; padding: 60px 20px; margin: 0 auto; z-index: 10; position: relative; }
-
-        /* RODAPÉ MÍNIMO */
-        footer { padding: 80px 20px; font-size: 0.8rem; color: #bbb; }
-
-        /* BOTÃO DE MÚSICA ESTILIZADO */
-        #music-btn {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            background: rgba(255, 255, 255, 0.9);
-            border: 1px solid #eee;
-            color: #555;
-            padding: 12px 24px;
-            border-radius: 30px;
-            cursor: pointer;
-            z-index: 1000;
-            font-size: 0.85rem;
-            font-weight: 600;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-            transition: 0.3s;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        #music-btn:hover { background: var(--accent); color: white; border-color: var(--accent); }
-
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-    </style>
-</head>
-<body>
-
-    <button id="music-btn" onclick="playMusic()">
-        <span style="font-size: 1.2rem;">🎶</span> tocar nossa trilha
-    </button>
-    <iframe id="song" width="0" height="0" src="https://www.youtube.com/embed/pAnvIuI8Wxs?enablejsapi=1" frameborder="0"></iframe>
-
-    <header>
-        <h1 class="bruno">o tempo que a gente inventou.</h1>
-        <p class="subtitle">para eduarda, com todo o meu girassol.</p>
-        
-        <div id="garden"></div>
-    </header>
-
-    <div class="date-box">
-        <p class="date-label" style="font-size: 0.8rem; color: #aaa; text-transform: uppercase; letter-spacing: 2px;">nos conhecemos em</p>
-        <p class="bruno" style="font-size: 1.8rem; margin: 10px 0;">31 de janeiro de 2025</p>
-        <p style="color: #666;">quando meus olhos te viram pela primeira vez.</p>
-        <div id="meet-timer" class="counter"></div>
-    </div>
-
-    <div class="date-box">
-        <p class="date-label" style="font-size: 0.8rem; color: #aaa; text-transform: uppercase; letter-spacing: 2px;">começamos a namorar em</p>
-        <p class="bruno" style="font-size: 1.8rem; margin: 10px 0;">28 de agosto de 2025</p>
-        <p style="color: #666;">quando a gente decidiu ser nó.</p>
-        <div id="love-timer" class="counter"></div>
-    </div>
-
-    <div class="poem-end bruno" style="font-size: 1.6rem; line-height: 1.8;">
-        que a gente continue assim:<br>
-        virando pro sol,<br>
-        virando um pro outro.
-    </div>
-
-    <footer>tiago & eduarda — 2026</footer>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
 
     <script>
-        // --- 1. CONFIGURAÇÃO DE DATAS ---
-        const meet = new Date(2025, 0, 31); // Jan (mês 0)
-        const love = new Date(2025, 7, 28); // Ago (mês 7)
-
-        // --- 2. GERAÇÃO DO JARDIM REALISTA ---
-        function createGarden() {
-            const garden = document.getElementById('garden');
-            const totalFlowers = 35; // Aumentei a quantidade para encher
-
-            for (let i = 0; i < totalFlowers; i++) {
-                const flower = document.createElement('div');
-                flower.className = 'sunflower';
-                
-                // Posicionamento procedural (aleatório mas controlado)
-                const left = (Math.random() * 100); // 0% a 100% da largura
-                const bottom = (Math.random() * 60); // Espalha na base do cabeçalho
-                const sizeFactor = 0.5 + Math.random() * 0.8; // Tamanhos variados
-                const delay = Math.random() * 2; // Delay para nascerem em tempos diferentes
-
-                flower.style.left = `${left}%`;
-                flower.style.bottom = `${bottom}px`;
-                flower.style.transform = `scale(${sizeFactor})`;
-                flower.style.zIndex = Math.floor(bottom); // Flores de baixo ficam na frente
-                
-                // Animação de "florescer"
-                flower.style.animation = `bloom 1s ease-out ${delay}s forwards`;
-
-                garden.appendChild(flower);
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        serif: ['Playfair Display', 'serif'],
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: { paper: '#fdfaf7', ink: '#2c2c2c', gold: '#d4af37', accent: '#e0ac00' }
+                }
             }
         }
+    </script>
 
-        // --- 3. HELIOTROPISMO SUAVE (Seguir Mouse/Toque) ---
-        document.addEventListener('mousemove', (e) => {
-            const flowers = document.querySelectorAll('.sunflower');
-            flowers.forEach(f => {
-                const rect = f.getBoundingClientRect();
-                const flowerCenterX = rect.left + rect.width / 2;
-                const flowerCenterY = rect.top + rect.height / 2;
-
-                // Calcula o ângulo entre a flor e o mouse
-                const angle = Math.atan2(e.clientY - flowerCenterY, e.clientX - flowerCenterX);
-                const rotation = angle * (180 / Math.PI) + 90; // Converte para graus e ajusta o norte
-
-                // Aplica a rotação de forma suave (transition no CSS cuida disso)
-                f.style.transform = `scale(${f.style.transform.match(/scale\((.*?)\)/)[1]}) rotate(${rotation}deg)`;
-            });
-        });
-
-        // --- 4. CONTADORES DE TEMPO ---
-        function updateTimers() {
-            const now = new Date();
-            const calc = (date, id) => {
-                const diff = now - date;
-                const d = Math.floor(diff / 86400000);
-                const h = Math.floor((diff / 3600000) % 24);
-                const m = Math.floor((diff / 60000) % 60);
-                const s = Math.floor((diff / 1000) % 60);
-                document.getElementById(id).innerText = `${d}d • ${h}h • ${m}m • ${s}s`;
-            }
-            calc(meet, 'meet-timer');
-            calc(love, 'love-timer');
+    <style>
+        body { background-color: #fdfaf7; overflow-x: hidden; scroll-behavior: smooth; }
+        .bruno { font-family: 'Playfair Display', serif; font-style: italic; text-transform: lowercase; }
+        
+        /* Área das flores */
+        #garden-container { perspective: 1000px; }
+        .flower { 
+            position: absolute; 
+            transform-origin: bottom center; 
+            will-change: transform; 
+            filter: drop-shadow(0 10px 15px rgba(0,0,0,0.15));
+            cursor: pointer;
         }
 
-        // --- 5. MÚSICA ---
-        function playMusic() {
-            const song = document.getElementById('song');
-            song.src += "&autoplay=1&volume=50"; // Toca com volume médio
-            document.getElementById('music-btn').style.display = 'none'; // Esconde o botão após tocar
-        }
+        /* Esconde a barra de rolagem mas permite rolar */
+        ::-webkit-scrollbar { width: 0px; background: transparent; }
+    </style>
+</head>
+<body class="text-ink antialiased flex flex-col items-center">
 
-        // --- INICIALIZAÇÃO ---
-        createGarden();
-        setInterval(updateTimers, 1000);
-        updateTimers(); // Chama uma vez para não esperar 1 segundo
+    <button id="music-btn" class="fixed bottom-6 right-6 bg-white/90 backdrop-blur-sm border border-gray-200 text-ink px-6 py-3 rounded-full shadow-lg text-sm font-medium z-50 hover:text-gold transition-colors flex items-center gap-2">
+        <span class="text-lg">🎶</span> nossa trilha
+    </button>
+    <iframe id="song" class="hidden" src="https://www.youtube.com/embed/pAnvIuI8Wxs?enablejsapi=1" frameborder="0"></iframe>
+
+    <header class="relative w-full h-screen flex flex-col items-center justify-center overflow-hidden">
+        <div class="z-10 text-center mt-[-10vh]" id="hero-text">
+            <h1 class="bruno text-5xl md:text-6xl text-ink tracking-tight mb-4 opacity-0">o tempo que a gente inventou.</h1>
+            <p class="text-gray-500 text-sm tracking-widest uppercase opacity-0" id="hero-sub">Para Eduarda, meu girassol</p>
+        </div>
+        
+        <div id="garden-container" class="absolute bottom-0 w-full h-[50vh] flex justify-center items-end pointer-events-none"></div>
+    </header>
+
+    <section class="w-full max-w-2xl px-6 py-20 flex flex-col gap-24 z-10">
+        
+        <div class="date-card opacity-0 translate-y-10 bg-white p-10 rounded-3xl shadow-xl shadow-gold/5 border border-gold/10 relative">
+            <div class="absolute -top-4 left-10 bg-paper px-4 text-xs font-bold tracking-widest text-gray-400 uppercase">31 de Janeiro de 2025</div>
+            <h2 class="bruno text-3xl mb-2 text-gold">o primeiro olhar.</h2>
+            <p class="text-gray-600 mb-6">quando o mundo fez sentido pela primeira vez.</p>
+            <div id="timer-meet" class="text-2xl font-semibold tabular-nums text-ink">Calculando...</div>
+        </div>
+
+        <div class="date-card opacity-0 translate-y-10 bg-white p-10 rounded-3xl shadow-xl shadow-gold/5 border border-gold/10 relative">
+            <div class="absolute -top-4 left-10 bg-paper px-4 text-xs font-bold tracking-widest text-gray-400 uppercase">28 de Agosto de 2025</div>
+            <h2 class="bruno text-3xl mb-2 text-gold">o nosso nó.</h2>
+            <p class="text-gray-600 mb-6">quando a gente decidiu que um mais um era tudo.</p>
+            <div id="timer-love" class="text-2xl font-semibold tabular-nums text-ink">Calculando...</div>
+        </div>
+
+    </section>
+
+    <footer class="w-full text-center py-32 flex flex-col items-center">
+        <p class="bruno text-3xl md:text-4xl leading-relaxed max-w-lg text-ink/90 opacity-0" id="final-poem">
+            que a gente continue assim:<br>
+            virando pro sol,<br>
+            virando um pro outro.
+        </p>
+        <p class="mt-20 text-xs text-gray-400 tracking-widest">TIAGO & EDUARDA — 2026</p>
+    </footer>
+
+    <script>
+        // Placeholder para a Etapa 2...
     </script>
 </body>
 </html>
