@@ -87,7 +87,120 @@
     </footer>
 
     <script>
-        // Placeholder para a Etapa 2...
+        <script>
+        // --- 1. AS DATAS EXATAS ---
+        // Ano, Mês (0=Jan, 7=Ago), Dia, Hora
+        const dateMeet = new Date(2025, 0, 31, 0, 0, 0); 
+        const dateLove = new Date(2025, 7, 28, 0, 0, 0);
+
+        function updateTimers() {
+            const now = new Date();
+            const calc = (date, id) => {
+                const diff = now - date;
+                const d = Math.floor(diff / 86400000);
+                const h = Math.floor((diff / 3600000) % 24);
+                const m = Math.floor((diff / 60000) % 60);
+                const s = Math.floor((diff / 1000) % 60);
+                document.getElementById(id).innerText = `${d}d ${h}h ${m}m ${s}s`;
+            };
+            calc(dateMeet, 'timer-meet');
+            calc(dateLove, 'timer-love');
+        }
+        setInterval(updateTimers, 1000);
+        updateTimers();
+
+        // --- 2. ANIMAÇÕES DE CINEMA (ENTRADA) ---
+        // O título desce suavemente quando abre a página
+        gsap.to("#hero-text h1", { opacity: 1, y: 20, duration: 1.5, ease: "power3.out", delay: 0.5 });
+        gsap.to("#hero-sub", { opacity: 1, y: 20, duration: 1.5, ease: "power3.out", delay: 1 });
+
+        // Os cards e o poema só aparecem quando ela rolar a tela (Scroll)
+        const observerOptions = { threshold: 0.3 };
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if(entry.isIntersecting) {
+                    gsap.to(entry.target, {opacity: 1, y: 0, duration: 1.2, ease: "power2.out"});
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.date-card, #final-poem').forEach(el => observer.observe(el));
+
+        // --- 3. O JARDIM HELIOTRÓPICO 3.0 (FÍSICA REAL) ---
+        const garden = document.getElementById('garden-container');
+        const flowers = [];
+        
+        // Verifica se é celular ou PC para não travar o telefone
+        const isMobile = window.innerWidth < 768;
+        const numFlowers = isMobile ? 12 : 25; 
+
+        // Imagem 3D Premium de Girassol (sem fundo)
+        const hqSunflower = 'https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Animals%20and%20Nature/Sunflower.png';
+
+        for(let i = 0; i < numFlowers; i++) {
+            const f = document.createElement('img');
+            f.src = hqSunflower;
+            f.className = 'flower w-16 md:w-28'; // Maior no PC, menor no celular
+            
+            // Espalha as flores aleatoriamente
+            const left = Math.random() * 90; // De 0 a 90% da tela
+            const bottom = -10 + Math.random() * 30; // Dá variação de altura
+            const scale = 0.6 + Math.random() * 0.5; // Umas maiores, outras menores
+            
+            f.style.left = `${left}%`;
+            f.style.bottom = `${bottom}px`;
+            f.style.zIndex = Math.floor(100 - bottom); // Quem tá embaixo fica na frente
+            
+            garden.appendChild(f);
+            flowers.push({ el: f, baseScale: scale });
+
+            // Animação das flores brotando (efeito elástico)
+            gsap.fromTo(f, 
+                { opacity: 0, y: 150, scale: 0 }, 
+                { opacity: 1, y: 0, scale: scale, duration: 1.5, ease: "back.out(1.5)", delay: 1.5 + Math.random() * 1.5 }
+            );
+        }
+
+        // A Matemática do Movimento (Seguindo o Sol/Eduarda)
+        function rotateFlowers(clientX, clientY) {
+            flowers.forEach(f => {
+                const rect = f.el.getBoundingClientRect();
+                const centerX = rect.left + rect.width / 2;
+                const centerY = rect.top + rect.height; // A base da flor
+
+                // Calcula o ângulo em radianos e converte pra graus
+                const angleRad = Math.atan2(clientY - centerY, clientX - centerX);
+                let angleDeg = angleRad * (180 / Math.PI) + 90;
+
+                // Limita a rotação para a flor não "quebrar o pescoço"
+                if(angleDeg > 65) angleDeg = 65;
+                if(angleDeg < -65) angleDeg = -65;
+
+                // GSAP aplica a rotação suavemente (Física)
+                gsap.to(f.el, { rotation: angleDeg, duration: 0.8, ease: "power2.out" });
+            });
+        }
+
+        // Funciona no Mouse (PC) e no Dedo (Celular)
+        document.addEventListener('mousemove', (e) => rotateFlowers(e.clientX, e.clientY));
+        document.addEventListener('touchmove', (e) => rotateFlowers(e.touches[0].clientX, e.touches[0].clientY));
+
+        // --- 4. PLAYER DE MÚSICA ---
+        const musicBtn = document.getElementById('music-btn');
+        const song = document.getElementById('song');
+        let isPlaying = false;
+        
+        musicBtn.addEventListener('click', () => {
+            if(!isPlaying) {
+                song.src += "&autoplay=1";
+                musicBtn.innerHTML = '<span class="text-lg">💛</span> ouvindo nosso romance';
+                musicBtn.classList.add('text-gold', 'border-gold');
+                gsap.to(musicBtn, { scale: 1.05, duration: 0.3, yoyo: true, repeat: 1 });
+                isPlaying = true;
+            }
+        });
+    </script>
     </script>
 </body>
 </html>
